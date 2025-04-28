@@ -1,7 +1,10 @@
 import React, { useEffect } from "react";
 import MainSec from "./MainSec";
 import Header from "./Header";
+import Loader from "./Loader";
+import Error from "./Error";
 import { useReducer } from "react";
+import StartScreen from "./StartScreen";
 // import DateCounter from "./DateCounter";
 
 const App = () => {
@@ -21,13 +24,14 @@ const App = () => {
       case "dataFailed":
         return {
           ...state,
-          status: "failed",
+          status: "error",
         };
       default:
         throw new Error("Action unknown");
     }
   }
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [{ questions, status }, dispatch] = useReducer(reducer, initialState);
+  const numQuestions = questions.length;
   useEffect(() => {
     fetch(`http://localhost:5174/questions`)
       .then((res) => res.json())
@@ -39,7 +43,11 @@ const App = () => {
     <div className="app">
       {/* <DateCounter /> */}
       <Header />
-      <MainSec />
+      <MainSec>
+        {status === "loading" && <Loader />}
+        {status === "error" && <Error />}
+        {status === "ready" && <StartScreen numQuestions={numQuestions} />}
+      </MainSec>
     </div>
   );
 };
