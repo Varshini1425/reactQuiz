@@ -5,11 +5,14 @@ import Loader from "./Loader";
 import Error from "./Error";
 import { useReducer } from "react";
 import StartScreen from "./StartScreen";
+import Question from "./Question";
 // import DateCounter from "./DateCounter";
 
 const App = () => {
   const initialState = {
     questions: [],
+
+    // 'loading', 'ready', 'error', 'active', 'finished'
     status: "loading",
   };
 
@@ -25,6 +28,11 @@ const App = () => {
         return {
           ...state,
           status: "error",
+        };
+      case "start":
+        return {
+          ...state,
+          status: "active",
         };
       default:
         throw new Error("Action unknown");
@@ -46,7 +54,10 @@ const App = () => {
       <MainSec>
         {status === "loading" && <Loader />}
         {status === "error" && <Error />}
-        {status === "ready" && <StartScreen numQuestions={numQuestions} />}
+        {status === "ready" && (
+          <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
+        )}
+        {status === "active" && <Question />}
       </MainSec>
     </div>
   );
