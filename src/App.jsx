@@ -1,10 +1,14 @@
 import React from "react";
-import DateCounter from "./DateCounter";
+import MainSec from "./MainSec";
+import Header from "./Header";
+// import DateCounter from "./DateCounter";
 
 const App = () => {
   return (
-    <div>
-      <DateCounter />
+    <div className="app">
+      {/* <DateCounter /> */}
+      <Header />
+      <MainSec />
     </div>
   );
 };
