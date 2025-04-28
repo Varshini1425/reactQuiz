@@ -6,6 +6,7 @@ import Error from "./Error";
 import { useReducer } from "react";
 import StartScreen from "./StartScreen";
 import Question from "./Question";
+import NextButton from "./NextButton";
 // import DateCounter from "./DateCounter";
 
 const App = () => {
@@ -48,6 +49,12 @@ const App = () => {
               : state.points,
         };
       }
+      case "nextQuestion":
+        return {
+          ...state,
+          index: state.index + 1,
+          answer: null,
+        };
       default:
         throw new Error("Action unknown");
     }
@@ -75,11 +82,14 @@ const App = () => {
           <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
         )}
         {status === "active" && (
-          <Question
-            question={questions[index]}
-            dispatch={dispatch}
-            answer={answer}
-          />
+          <>
+            <Question
+              question={questions[index]}
+              dispatch={dispatch}
+              answer={answer}
+            />
+            <NextButton dispatch={dispatch} answer={answer} />
+          </>
         )}
       </MainSec>
     </div>
