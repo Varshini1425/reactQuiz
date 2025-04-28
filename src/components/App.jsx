@@ -7,6 +7,8 @@ import { useReducer } from "react";
 import StartScreen from "./StartScreen";
 import Question from "./Question";
 import NextButton from "./NextButton";
+import Progress from "./Progress";
+
 // import DateCounter from "./DateCounter";
 
 const App = () => {
@@ -59,11 +61,15 @@ const App = () => {
         throw new Error("Action unknown");
     }
   }
-  const [{ questions, status, index, answer }, dispatch] = useReducer(
+  const [{ questions, status, index, answer, points }, dispatch] = useReducer(
     reducer,
     initialState
   );
   const numQuestions = questions.length;
+  const maxPossiblePoints = questions.reduce(
+    (prev, cur) => prev + cur.points,
+    0
+  );
   useEffect(() => {
     fetch(`http://localhost:5174/questions`)
       .then((res) => res.json())
@@ -83,6 +89,13 @@ const App = () => {
         )}
         {status === "active" && (
           <>
+            <Progress
+              index={index}
+              numQuestions={numQuestions}
+              points={points}
+              maxPossiblePoints={maxPossiblePoints}
+              answer={answer}
+            />
             <Question
               question={questions[index]}
               dispatch={dispatch}
